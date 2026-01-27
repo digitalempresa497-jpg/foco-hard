@@ -2,203 +2,170 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>FOCO HARD</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOCO HARD</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Arial;
-  background: #0f172a;
-  color: #fff;
+:root {
+  --bg: #0b1220;
+  --card: #111a2e;
+  --primary: #38bdf8;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
 }
 
-nav {
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial;
+  color: var(--text);
+}
+
+/* HEADER */
+.header {
+  padding: 20px;
   display: flex;
-  justify-content: space-around;
-  background: #020617;
-  padding: 12px 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.header h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+/* CONTAINER */
+.container {
+  padding: 0 20px 90px;
+}
+
+/* CARD */
+.card {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+/* CTA */
+.cta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cta h2 {
+  margin: 0 0 5px;
+  font-size: 18px;
+}
+
+.cta p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.play {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22d3ee, #3b82f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #020617;
+}
+
+/* PROGRESS */
+.progress {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.circle {
+  flex: 1;
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+}
+
+.circle span {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.circle small {
+  color: var(--muted);
+}
+
+/* FEED */
+.feed-item {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+/* NAV */
+nav {
   position: fixed;
   bottom: 0;
   width: 100%;
+  background: #020617;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
 }
 
 nav button {
   background: none;
   border: none;
-  color: #94a3b8;
-  font-size: 14px;
+  color: var(--muted);
+  font-size: 13px;
 }
 
 nav button.active {
-  color: #38bdf8;
-}
-
-.page {
-  display: none;
-  padding: 20px;
-  padding-bottom: 80px;
-}
-
-.page.active {
-  display: block;
-}
-
-.card {
-  background: #020617;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-}
-
-input, select, button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 8px;
-  border-radius: 8px;
-  border: none;
-  font-size: 15px;
-}
-
-button {
-  background: #38bdf8;
-  color: #020617;
-  font-weight: bold;
-}
-
-.timer {
-  font-size: 42px;
-  text-align: center;
-  margin: 20px 0;
+  color: var(--primary);
 }
 </style>
 </head>
 
 <body>
 
-<!-- HOME -->
-<div id="home" class="page active">
-  <h2>🏠 FOCO HARD</h2>
-  <div class="card">
-    <p>Bem-vindo ao seu app de estudos focados.</p>
-    <p>Estude, registre e acompanhe sua evolução.</p>
+<div class="header">
+  <strong>⚡</strong>
+  <h1>FOCO HARD</h1>
+</div>
+
+<div class="container">
+
+  <!-- CTA -->
+  <div class="card cta">
+    <div>
+      <h2>Inicie uma nova sessão</h2>
+      <p>Construa consistência diária</p>
+    </div>
+    <div class="play">▶</div>
   </div>
-</div>
 
-<!-- ESTUDO -->
-<div id="study" class="page">
-  <h2>⏱ Estudo</h2>
-  <div class="card">
-    <select id="materia">
-      <option value="">Selecione a matéria</option>
-      <option>ADS</option>
-      <option>Lógica</option>
-      <option>Programação</option>
-      <option>Banco de Dados</option>
-    </select>
-
-    <div class="timer" id="timer">00:00</div>
-    <button onclick="iniciar()">Iniciar</button>
-    <button onclick="finalizar()">Finalizar</button>
-  </div>
-</div>
-
-<!-- FEED -->
-<div id="feed" class="page">
-  <h2>🧠 Feed de Estudos</h2>
-  <div id="posts"></div>
-</div>
-
-<!-- STATS -->
-<div id="stats" class="page">
-  <h2>📊 Estatísticas</h2>
-  <div id="estatisticas"></div>
-</div>
-
-<nav>
-  <button onclick="show('home')" class="active">Home</button>
-  <button onclick="show('study')">Estudo</button>
-  <button onclick="show('feed')">Feed</button>
-  <button onclick="show('stats')">Stats</button>
-</nav>
-
-<script>
-let segundos = 0;
-let intervalo = null;
-let materiaAtual = "";
-
-const dados = JSON.parse(localStorage.getItem("focoHard")) || [];
-
-function show(id) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  event.target.classList.add("active");
-  if (id === "feed") renderFeed();
-  if (id === "stats") renderStats();
-}
-
-function iniciar() {
-  const materia = document.getElementById("materia").value;
-  if (!materia) return alert("Selecione uma matéria");
-  materiaAtual = materia;
-  if (!intervalo) {
-    intervalo = setInterval(() => {
-      segundos++;
-      const m = String(Math.floor(segundos / 60)).padStart(2, "0");
-      const s = String(segundos % 60).padStart(2, "0");
-      document.getElementById("timer").innerText = `${m}:${s}`;
-    }, 1000);
-  }
-}
-
-function finalizar() {
-  clearInterval(intervalo);
-  intervalo = null;
-
-  if (segundos > 0) {
-    dados.push({
-      materia: materiaAtual,
-      tempo: segundos,
-      data: new Date().toLocaleString()
-    });
-    localStorage.setItem("focoHard", JSON.stringify(dados));
-  }
-
-  segundos = 0;
-  document.getElementById("timer").innerText = "00:00";
-}
-
-function renderFeed() {
-  const feed = document.getElementById("posts");
-  feed.innerHTML = "";
-  dados.slice().reverse().forEach(d => {
-    feed.innerHTML += `
-      <div class="card">
-        <strong>${d.materia}</strong><br>
-        ⏱ ${Math.floor(d.tempo/60)} min<br>
-        📅 ${d.data}
-      </div>`;
-  });
-}
-
-function renderStats() {
-  const stats = {};
-  dados.forEach(d => {
-    stats[d.materia] = (stats[d.materia] || 0) + d.tempo;
-  });
-
-  const div = document.getElementById("estatisticas");
-  div.innerHTML = "";
-
-  for (let m in stats) {
-    div.innerHTML += `
-      <div class="card">
-        ${m}: ${Math.floor(stats[m]/60)} minutos
-      </div>`;
-  }
-}
-</script>
-
-</body>
-</html>
+  <!-- PROGRESSO -->
+  <h3>Atividade recente</h3>
+  <div class="progress">
+    <div class="circle">
+      <span>75%</span>
+      <small>ADS</small>
+    </div>
+    <div class="circle">
+      <span>50%</span>
+      <small>Lógica</small>
+    </div>
+    <d
