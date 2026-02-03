@@ -1,198 +1,245 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FOCO HARD</title>
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { TrendingUp, Clock, BookOpen, Target, Award, Calendar } from 'lucide-react';
 
-<style>
-:root {
-  --bg: #0b1220;
-  --card: #111a2e;
-  --primary: #38bdf8;
-  --text: #e5e7eb;
-  --muted: #94a3b8;
-}
+// Mock data for statistics
+const weeklyStudyData = [
+  { day: 'Seg', hours: 2.5 },
+  { day: 'Ter', hours: 3.0 },
+  { day: 'Qua', hours: 1.5 },
+  { day: 'Qui', hours: 4.0 },
+  { day: 'Sex', hours: 2.0 },
+  { day: 'Sáb', hours: 3.5 },
+  { day: 'Dom', hours: 2.5 },
+];
 
-* {
-  box-sizing: border-box;
-}
+const subjectDistribution = [
+  { name: 'Matemática', value: 35, color: '#3b82f6' },
+  { name: 'Física', value: 28, color: '#8b5cf6' },
+  { name: 'Química', value: 22, color: '#10b981' },
+  { name: 'Biologia', value: 15, color: '#f59e0b' },
+];
 
-body {
-  margin: 0;
-  background: var(--bg);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial;
-  color: var(--text);
-}
+const recentActivities = [
+  {
+    id: 1,
+    subject: 'Matemática',
+    topic: 'Derivadas',
+    duration: '45 min',
+    date: 'Hoje, 14:30',
+    color: 'bg-blue-500',
+  },
+  {
+    id: 2,
+    subject: 'Física',
+    topic: 'Dinâmica',
+    duration: '30 min',
+    date: 'Hoje, 10:00',
+    color: 'bg-purple-500',
+  },
+  {
+    id: 3,
+    subject: 'Química',
+    topic: 'Estequiometria',
+    duration: '60 min',
+    date: 'Ontem, 16:00',
+    color: 'bg-green-500',
+  },
+  {
+    id: 4,
+    subject: 'Matemática',
+    topic: 'Integrais',
+    duration: '40 min',
+    date: 'Ontem, 09:30',
+    color: 'bg-blue-500',
+  },
+];
 
-/* HEADER */
-.header {
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+const goals = [
+  { id: 1, title: 'Estudar 20 horas esta semana', current: 19, target: 20, color: 'bg-blue-500' },
+  { id: 2, title: 'Completar 15 tópicos', current: 12, target: 15, color: 'bg-green-500' },
+  { id: 3, title: '30 sessões Pomodoro', current: 28, target: 30, color: 'bg-purple-500' },
+];
 
-.header h1 {
-  font-size: 20px;
-  margin: 0;
-}
+export function StudyDashboard() {
+  const totalHours = weeklyStudyData.reduce((sum, day) => sum + day.hours, 0);
+  const avgHoursPerDay = (totalHours / 7).toFixed(1);
+  const studyStreak = 7; // Mock data
 
-/* CONTAINER */
-.container {
-  padding: 0 20px 90px;
-}
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h2 className="text-foreground">Seu Progresso</h2>
+        <p className="text-muted-foreground mt-1">Acompanhe suas estatísticas e evolução nos estudos</p>
+      </div>
 
-/* CARD */
-.card {
-  background: linear-gradient(135deg, #1e293b, #0f172a);
-  border-radius: 18px;
-  padding: 18px;
-  margin-bottom: 20px;
-}
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white rounded-lg shadow-sm border border-border p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-muted-foreground">Horas esta semana</p>
+              <p className="text-3xl text-foreground mt-1">{totalHours.toFixed(1)}</p>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <Clock className="w-6 h-6 text-blue-600" />
+            </div>
+          </div>
+          <div className="flex items-center gap-1 mt-3 text-sm text-green-600">
+            <TrendingUp className="w-4 h-4" />
+            <span>+12% vs semana passada</span>
+          </div>
+        </div>
 
-/* CTA */
-.cta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+        <div className="bg-white rounded-lg shadow-sm border border-border p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-muted-foreground">Média diária</p>
+              <p className="text-3xl text-foreground mt-1">{avgHoursPerDay}h</p>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <Target className="w-6 h-6 text-green-600" />
+            </div>
+          </div>
+          <div className="flex items-center gap-1 mt-3 text-sm text-green-600">
+            <TrendingUp className="w-4 h-4" />
+            <span>Meta: 2.5h/dia</span>
+          </div>
+        </div>
 
-.cta h2 {
-  margin: 0 0 5px;
-  font-size: 18px;
-}
+        <div className="bg-white rounded-lg shadow-sm border border-border p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-muted-foreground">Sequência de dias</p>
+              <p className="text-3xl text-foreground mt-1">{studyStreak}</p>
+            </div>
+            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+              <Calendar className="w-6 h-6 text-orange-600" />
+            </div>
+          </div>
+          <div className="flex items-center gap-1 mt-3 text-sm text-muted-foreground">
+            <span>Continue assim! 🔥</span>
+          </div>
+        </div>
 
-.cta p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 14px;
-}
+        <div className="bg-white rounded-lg shadow-sm border border-border p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-muted-foreground">Tópicos concluídos</p>
+              <p className="text-3xl text-foreground mt-1">12</p>
+            </div>
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <Award className="w-6 h-6 text-purple-600" />
+            </div>
+          </div>
+          <div className="flex items-center gap-1 mt-3 text-sm text-muted-foreground">
+            <span>8 em progresso</span>
+          </div>
+        </div>
+      </div>
 
-.play {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #22d3ee, #3b82f6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: #020617;
-}
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Weekly Study Hours Chart */}
+        <div className="lg:col-span-2 bg-white rounded-lg shadow-sm border border-border p-6">
+          <h3 className="text-foreground mb-4">Horas de Estudo - Semana</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={weeklyStudyData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="day" stroke="#6b7280" />
+              <YAxis stroke="#6b7280" />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'white', 
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px'
+                }}
+              />
+              <Bar dataKey="hours" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
 
-/* PROGRESS */
-.progress {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
+        {/* Subject Distribution Pie Chart */}
+        <div className="bg-white rounded-lg shadow-sm border border-border p-6">
+          <h3 className="text-foreground mb-4">Distribuição por Matéria</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={subjectDistribution}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {subjectDistribution.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
 
-.circle {
-  flex: 1;
-  background: var(--card);
-  border-radius: 16px;
-  padding: 16px;
-  text-align: center;
-}
+      {/* Goals and Recent Activity */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Goals */}
+        <div className="bg-white rounded-lg shadow-sm border border-border p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Target className="w-5 h-5 text-blue-600" />
+            <h3 className="text-foreground">Metas da Semana</h3>
+          </div>
+          <div className="space-y-4">
+            {goals.map(goal => {
+              const progress = (goal.current / goal.target) * 100;
+              return (
+                <div key={goal.id}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-foreground">{goal.title}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {goal.current}/{goal.target}
+                    </span>
+                  </div>
+                  <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full ${goal.color} transition-all duration-300`}
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
-.circle span {
-  display: block;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.circle small {
-  color: var(--muted);
-}
-
-/* FEED */
-.feed-item {
-  background: var(--card);
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 12px;
-  font-size: 14px;
-}
-
-/* NAV */
-nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #020617;
-  display: flex;
-  justify-content: space-around;
-  padding: 12px 0;
-}
-
-nav button {
-  background: none;
-  border: none;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-nav button.active {
-  color: var(--primary);
-}
-</style>
-</head>
-
-<body>
-
-<div class="header">
-  <strong>⚡</strong>
-  <h1>FOCO HARD</h1>
-</div>
-
-<div class="container">
-
-  <!-- CTA -->
-  <div class="card cta">
-    <div>
-      <h2>Inicie uma nova sessão</h2>
-      <p>Construa consistência diária</p>
+        {/* Recent Activity */}
+        <div className="bg-white rounded-lg shadow-sm border border-border p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <BookOpen className="w-5 h-5 text-purple-600" />
+            <h3 className="text-foreground">Atividades Recentes</h3>
+          </div>
+          <div className="space-y-3">
+            {recentActivities.map(activity => (
+              <div key={activity.id} className="flex items-start gap-3 pb-3 border-b border-border last:border-0 last:pb-0">
+                <div className={`w-3 h-3 ${activity.color} rounded-full mt-1.5 flex-shrink-0`} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-foreground">{activity.topic}</p>
+                  <p className="text-sm text-muted-foreground">{activity.subject}</p>
+                </div>
+                <div className="text-right flex-shrink-0">
+                  <p className="text-sm text-foreground">{activity.duration}</p>
+                  <p className="text-xs text-muted-foreground">{activity.date}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="play">▶</div>
-  </div>
-
-  <!-- PROGRESSO -->
-  <h3>Atividade recente</h3>
-  <div class="progress">
-    <div class="circle">
-      <span>75%</span>
-      <small>ADS</small>
-    </div>
-    <div class="circle">
-      <span>50%</span>
-      <small>Lógica</small>
-    </div>
-    <div class="circle">
-      <span>30%</span>
-      <small>Banco</small>
-    </div>
-  </div>
-
-  <!-- FEED -->
-  <h3 style="margin-top:25px">Últimos estudos</h3>
-  <div class="feed-item">
-    📘 ADS — 45 min<br>
-    <small>Hoje • 22:10</small>
-  </div>
-  <div class="feed-item">
-    📗 Lógica — 30 min<br>
-    <small>Ontem • 21:40</small>
-  </div>
-
-</div>
-
-<nav>
-  <button class="active">Home</button>
-  <button>Estudo</button>
-  <button>Feed</button>
-  <button>Stats</button>
-</nav>
-
-</body>
-</html>
+  );
+}
